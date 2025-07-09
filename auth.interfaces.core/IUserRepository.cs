@@ -1,10 +1,13 @@
-﻿namespace auth.interfaces.core;
+﻿using auth.domain.core;
+
+namespace auth.interfaces.core;
 
 public interface IUserRepository
 {
-    public Task Auth(string name, string password);
-    public Task<bool> IsAuth(string name);
+    public Task<bool> Auth(string login, string passHash);
+    public Task DeAuth(Guid id);
+    public Task<bool> IsAuth(string login);
     
-    public Task Register(string name, string password);
-    public Task<bool> IsRegister(string name);
+    public Task Register(User user);
+    public Task<bool> IsRegister(string login);
 }

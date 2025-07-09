@@ -1,28 +1,58 @@
-﻿using auth.interfaces.core;
+﻿using auth.domain.core;
+using auth.infrastructure.data.UserRepository.Mappers;
+using auth.interfaces.core;
+using Microsoft.EntityFrameworkCore;
 
 namespace auth.infrastructure.data.UserRepository;
 
 public class UserRepository : IUserRepository
 {
     private readonly UserDbContext _dbContext = new();
-    
-    public Task Auth(string name, string password)
+
+    public async Task<bool> Auth(string login, string passHash)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(c => c.Login == login);
+
+        if (user?.PassHash != passHash) return false;
+        
+        user.IsAuth = true;
+        await _dbContext.SaveChangesAsync();
+        
+        return true;
+
     }
 
-    public Task<bool> IsAuth(string name)
+    public async Task DeAuth(Guid id)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(c => c.Id == id);
+        
+        user!.IsAuth = false;
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task Register(string name, string password)
+    public async Task<bool> IsAuth(string login)
     {
-        throw new NotImplementedException();
+        var user = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Login == login);
+
+        return user is { IsAuth: true };
     }
 
-    public Task<bool> IsRegister(string name)
+    public async Task Register(User user)
     {
-        throw new NotImplementedException();
+        await _dbContext.AddAsync(UserMapper.ToModel(user));
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsRegister(string login)
+    {
+        var result = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Login == login);
+        
+        return result != null;
     }
 }

@@ -9,7 +9,7 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.HasKey(entity => entity.Id);
-        builder.Property(entity => entity.Name);
+        builder.Property(entity => entity.Login);
         builder.Property(entity => entity.PassHash);
     }
 }

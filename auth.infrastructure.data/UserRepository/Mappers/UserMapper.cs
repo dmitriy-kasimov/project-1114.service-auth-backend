@@ -10,7 +10,7 @@ public static class UserMapper
         return new User()
         {
             Id = userEntity.Id,
-            Name = userEntity.Name,
+            Login = userEntity.Login,
             PassHash = userEntity.PassHash,
         };
     }
@@ -20,7 +20,7 @@ public static class UserMapper
         return new UserEntity()
         {
             Id = user.Id,
-            Name = user.Name,
+            Login = user.Login,
             PassHash = user.PassHash,
         };
     }
