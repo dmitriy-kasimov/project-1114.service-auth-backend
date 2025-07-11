@@ -10,18 +10,17 @@ public class UserRepository : IUserRepository
 {
     private readonly UserDbContext _dbContext = new();
 
-    public async Task<bool> Auth(string login, string passHash)
+    public async Task<User> Auth(string login, string passHash)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(c => c.Login == login);
 
-        if (user?.PassHash != passHash) return false;
+        if (user?.PassHash != passHash) throw new Exception("Invalid login or password");
         
         user.IsAuth = true;
         await _dbContext.SaveChangesAsync();
-        
-        return true;
 
+        return UserMapper.ToDomain(user);
     }
 
     public async Task DeAuth(Guid id)
@@ -42,7 +41,7 @@ public class UserRepository : IUserRepository
         return user is { IsAuth: true };
     }
 
-    public async Task Reg(string login, string passHash)
+    public async Task<User> Reg(string login, string passHash)
     {
         var userEntity = new UserEntity()
         {
@@ -53,6 +52,8 @@ public class UserRepository : IUserRepository
 
         await _dbContext.AddAsync(userEntity);
         await _dbContext.SaveChangesAsync();
+
+        return UserMapper.ToDomain(userEntity);
     }
 
     public async Task<bool> IsReg(string login)

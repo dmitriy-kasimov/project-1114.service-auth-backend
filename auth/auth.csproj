@@ -4,6 +4,17 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+		<PlatformTarget>x64</PlatformTarget>
+		<BaseOutputPath>A:\Alone\PROJECTS\GTA5\Project-1114\project-1114.server\resources\service-auth\backend</BaseOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\auth.infrastructure.business\auth.infrastructure.business.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AltV.Net.Async" Version="16.4.19" />
+    </ItemGroup>
 
 </Project>

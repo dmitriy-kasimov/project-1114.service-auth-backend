@@ -1,8 +1,10 @@
-﻿namespace auth.services.interfaces;
+﻿using auth.domain.core;
+
+namespace auth.services.interfaces;
 
 public interface IUserService
 {
-    public Task Auth(string login, string password);
+    public Task<User> Auth(string login, string password);
     
-    public Task Reg(string login, string password);
+    public Task<User> Reg(string login, string password);
 }
