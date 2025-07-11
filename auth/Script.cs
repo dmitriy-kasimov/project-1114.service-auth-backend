@@ -29,12 +29,12 @@ public class Script : IScript
         {
             var user = await _userService.Auth(login, password);
             player.SetData("Id", user.Id);
-            player.Emit("s:c/auth|success");
+            player.Emit("s:c/auth|succeed");
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            player.Emit("s:c/auth|rejected");
+            player.Emit("s:c/auth|rejected", e.Message);
         }
     }
     
@@ -45,12 +45,12 @@ public class Script : IScript
         {
             var user = await _userService.Reg(login, password);
             player.SetData("Id", user.Id);
-            player.Emit("s:c/reg|success");
+            player.Emit("s:c/reg|succeed");
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            player.Emit("s:c/reg|rejected");
+            player.Emit("s:c/reg|rejected", e.Message);
         }
     }
 }
