@@ -9,15 +9,48 @@ public class Script : IScript
     private readonly UserService _userService = new();
     
     [ScriptEvent(ScriptEventType.PlayerConnect)]
-    public async void OnPlayerConnect(IPlayer player, string reason)
+    public void OnPlayerConnect(IPlayer player, string reason)
     {
-        var newUser = await _userService.Reg(player.Name, reason);
+        player.Emit("s:c/start");
+    }
+    
+    [ScriptEvent(ScriptEventType.PlayerDisconnect)]
+    public async void OnPlayerDisconnect(IPlayer player, string reason)
+    {
+        if (!player.GetData<Guid>("Id", out var value)) return;
+        await _userService.DeAuth(value);
+        player.ClearData();
+    }
 
-        player.SetData("Id", newUser.Id);
-
-        if (player.GetData<Guid>("Id", out var value))
+    [ClientEvent("c:s/auth")]
+    public async void AuthHandler(IPlayer player, string login, string password)
+    {
+        try
         {
-            Console.WriteLine($"User reged and his id: {value}");
+            var user = await _userService.Auth(login, password);
+            player.SetData("Id", user.Id);
+            player.Emit("s:c/auth|success");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            player.Emit("s:c/auth|rejected");
+        }
+    }
+    
+    [ClientEvent("c:s/reg")]
+    public async void RegHandler(IPlayer player, string login, string password)
+    {
+        try
+        {
+            var user = await _userService.Reg(login, password);
+            player.SetData("Id", user.Id);
+            player.Emit("s:c/reg|success");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            player.Emit("s:c/reg|rejected");
         }
     }
 }
