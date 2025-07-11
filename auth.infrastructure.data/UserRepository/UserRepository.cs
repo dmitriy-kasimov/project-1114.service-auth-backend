@@ -1,4 +1,5 @@
 ﻿using auth.domain.core;
+using auth.infrastructure.data.UserRepository.Entities;
 using auth.infrastructure.data.UserRepository.Mappers;
 using auth.interfaces.core;
 using Microsoft.EntityFrameworkCore;
@@ -41,13 +42,20 @@ public class UserRepository : IUserRepository
         return user is { IsAuth: true };
     }
 
-    public async Task Register(User user)
+    public async Task Reg(string login, string passHash)
     {
-        await _dbContext.AddAsync(UserMapper.ToModel(user));
+        var userEntity = new UserEntity()
+        {
+            Login = login,
+            PassHash = passHash,
+            IsAuth = true
+        };
+
+        await _dbContext.AddAsync(userEntity);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<bool> IsRegister(string login)
+    public async Task<bool> IsReg(string login)
     {
         var result = await _dbContext.Users
             .AsNoTracking()

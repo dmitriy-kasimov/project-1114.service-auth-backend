@@ -7,12 +7,7 @@ public static class UserMapper
 {
     public static User ToDomain(UserEntity userEntity)
     {
-        return new User()
-        {
-            Id = userEntity.Id,
-            Login = userEntity.Login,
-            PassHash = userEntity.PassHash,
-        };
+        return new User(userEntity.Id, userEntity.Login, userEntity.PassHash);
     }
     
     public static UserEntity ToModel(User user)

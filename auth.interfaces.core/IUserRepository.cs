@@ -8,6 +8,6 @@ public interface IUserRepository
     public Task DeAuth(Guid id);
     public Task<bool> IsAuth(string login);
     
-    public Task Register(User user);
-    public Task<bool> IsRegister(string login);
+    public Task Reg(string login, string passHash);
+    public Task<bool> IsReg(string login);
 }
