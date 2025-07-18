@@ -10,14 +10,14 @@ public class UserRepository : IUserRepository
 {
     private readonly UserDbContext _dbContext = new();
 
-    public async Task<User> Auth(string login, string passHash)
+    public async Task<User> Auth(string login, string password)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(c => c.Login == login);
-
-        if (user?.PassHash != passHash) throw new Exception("Invalid login or password");
         
-        user.IsAuth = true;
+        if (!BCrypt.Net.BCrypt.Verify(password, user?.PassHash)) throw new Exception("Неверный логин или пароль.");
+        
+        user!.IsAuth = true;
         await _dbContext.SaveChangesAsync();
 
         return UserMapper.ToDomain(user);
@@ -41,12 +41,12 @@ public class UserRepository : IUserRepository
         return user is { IsAuth: true };
     }
 
-    public async Task<User> Reg(string login, string passHash)
+    public async Task<User> Reg(string login, string password)
     {
         var userEntity = new UserEntity()
         {
             Login = login,
-            PassHash = passHash,
+            PassHash = BCrypt.Net.BCrypt.HashPassword(password),
             IsAuth = true
         };
 

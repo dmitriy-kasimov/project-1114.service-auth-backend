@@ -27,6 +27,6 @@ public class UserService : IUserService
         if (await _userRepository.IsReg(login)) throw new Exception("Учетная запись уже зарегистрирована.");
         if (password.Length < 8) throw new Exception("Пароль должен быть длиной не менее 8 символов!");
         
-        return await _userRepository.Reg(login, BCrypt.Net.BCrypt.HashPassword(password));
+        return await _userRepository.Reg(login, password);
     }
 }

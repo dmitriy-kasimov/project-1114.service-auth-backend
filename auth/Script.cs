@@ -1,4 +1,5 @@
-﻿using AltV.Net;
+﻿using System.Text.Json;
+using AltV.Net;
 using AltV.Net.Elements.Entities;
 using auth.infrastructure.business;
 
@@ -29,12 +30,12 @@ public class Script : IScript
         {
             var user = await _userService.Auth(login, password);
             player.SetData("Id", user.Id);
-            player.Emit("s:c/auth|succeed");
+            player.Emit("s:c/auth", JsonSerializer.Serialize(new Response<string>(true)));
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            player.Emit("s:c/auth|rejected", e.Message);
+            player.Emit("s:c/auth", JsonSerializer.Serialize(new Response<string>(false, null, e.Message)));
         }
     }
     
@@ -45,12 +46,12 @@ public class Script : IScript
         {
             var user = await _userService.Reg(login, password);
             player.SetData("Id", user.Id);
-            player.Emit("s:c/reg|succeed");
+            player.Emit("s:c/reg", JsonSerializer.Serialize(new Response<string>(true)));
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            player.Emit("s:c/reg|rejected", e.Message);
+            player.Emit("s:c/reg", JsonSerializer.Serialize(new Response<string>(false, null, e.Message)));
         }
     }
 }

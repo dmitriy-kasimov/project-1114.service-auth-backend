@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 		<PlatformTarget>x64</PlatformTarget>
-		<BaseOutputPath>A:\Alone\PROJECTS\GTA5\Project-1114\project-1114.server\resources\service-auth\backend</BaseOutputPath>
+		<BaseOutputPath>H:\Project-1114\project-1114.server\resources\service-auth\backend</BaseOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 

@@ -10,7 +10,7 @@ public class UserDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("SERVER=localhost;DATABASE=service-auth;UID=root;Password=;Pooling=true;");
+        optionsBuilder.UseNpgsql("SERVER=localhost;DATABASE=service-auth;UID=postgres;Password=_P0$stgre$!;Pooling=true;");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
